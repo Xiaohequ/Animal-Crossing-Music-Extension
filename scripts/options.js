@@ -19,6 +19,9 @@ function saveOptions() {
 	else if (document.getElementById('wild-world').checked) {
 		music = 'wild-world';
 	}
+	else if (document.getElementById('wild-world-raining').checked) {
+		music = 'wild-world-raining';
+	}
 	else if (document.getElementById('wild-world-snowing').checked) {
 		music = 'wild-world-snowing';
 	}
@@ -81,6 +84,7 @@ document.addEventListener('DOMContentLoaded', restoreOptions);
 document.getElementById('volume').onchange              = saveOptions;
 document.getElementById('animal-forrest').onclick       = saveOptions;
 document.getElementById('wild-world').onclick           = saveOptions;
+document.getElementById('wild-world-raining').onclick   = saveOptions;
 document.getElementById('wild-world-snowing').onclick   = saveOptions;
 document.getElementById('new-leaf').onclick             = saveOptions;
 document.getElementById('new-leaf-snowing').onclick     = saveOptions;
@@ -91,9 +95,9 @@ document.getElementById('random').onclick               = saveOptions;
 document.getElementById('no-kk').onclick                = saveOptions;
 document.getElementById('enable-kk').onclick            = saveOptions;
 document.getElementById('always-kk').onclick            = saveOptions;
+document.getElementById('enable-badge').onclick         = saveOptions;
 document.getElementById('enable-notifications').onclick = saveOptions;
 document.getElementById('enable-town-tune').onclick     = saveOptions;
-document.getElementById('enable-badge').onclick         = saveOptions;
 document.getElementById('update-location').onclick      = saveOptions;
 
 // About/Help

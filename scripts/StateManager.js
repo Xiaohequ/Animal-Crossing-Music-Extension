@@ -63,7 +63,14 @@ function StateManager() {
 	}
 
 	function isLive() {
-		return options.music == 'new-leaf-live';
+		return options.music == 'new-leaf-live' || options.music == 'wild-world-live';
+	}
+	
+	function getLiveGame() {
+		if(options.music == 'new-leaf-live')
+			return 'new-leaf';
+		else if(options.music == 'wild-world-live')
+			return 'wild-world';
 	}
 
 	// retrieve saved options
@@ -92,21 +99,23 @@ function StateManager() {
 	// we're using a live weather option.
 	function getMusic() {
 		if(isLive()) {
+			var game = getLiveGame();
 			if(weatherManager.getWeather() == "Rain")
-				return "new-leaf-raining";
+				return game + "-raining";
 			else if(weatherManager.getWeather() == "Snow")
-				return "new-leaf-snowing";
+				return game + "-snowing";
 			else
-				return "new-leaf";
+				return game;
 		}
 		else {
 			if (options.music === "random"){
 				let games = ['animal-forrest',
 										'wild-world',
+										'wild-world-raining',
 										'wild-world-snowing',
 										'new-leaf',
 										'new-leaf-raining',
-										'new-leaf-snowing',];
+										'new-leaf-snowing'];
 				return games[Math.floor(Math.random() * games.length)];
 			} else
 				return options.music;

@@ -1,3 +1,24 @@
+@font-face { font-family: ACheader; src: url('animal-crossing.otf'); } 
+@font-face { font-family: ACtext; src: url('Seconda Round.otf'); } 
+
+html, body {
+  font-family: ACheader !important;
+  background: linear-gradient(#a5f4ff, #d8faff);
+  background-attachment: fixed;
+  margin, padding: 0;
+  height: 100%;
+}
+
+label, p, input {
+  font-family: ACtext !important;
+}
+
+#house {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
 .hidden {
   display: none;
 }
@@ -9,8 +30,8 @@ section {
 
 .pitch {
   display: inline-block;
-  width: 25px;
-  margin:5px;
+  width: 37px;
+  margin:0px;
 }
 
 .pitch-name {
@@ -57,9 +78,8 @@ input[type="range"]#volume{
     -webkit-appearance: none;
 	width: 129px;
 	height: 3px;
-    background-color: #e3ddd8; 
+    background-color: #595959; 
 }
-
 
 input[type="range"].pitch-slider{
     -webkit-appearance: none;
@@ -67,7 +87,7 @@ input[type="range"].pitch-slider{
 	margin: 40px -20px;
 	width: 75px;
 	height: 3px;
-    background-color: #e3ddd8; 
+    background-color: #595959; 
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -121,7 +141,7 @@ input[type=radio   ]:not(old):checked + label > span{
 }
 
 input[type=checkbox]:not(old):checked + label > span:before{
-  content     : '✓';
+  content     : '✔';
   display     : block;
   width       : 10px;
   color       : #595959;
