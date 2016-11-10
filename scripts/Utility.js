@@ -21,6 +21,14 @@ function formatHour(time) {
 	return (time - 12) + 'p';
 }
 
+function audioPlaying() {
+	chrome.tabs.query({
+		audible: true
+	}, function(tabs) {
+		return tabs.length;
+	});
+}
+
 function printDebug(message) {
 	if (DEBUG_FLAG) console.log(message);
 }

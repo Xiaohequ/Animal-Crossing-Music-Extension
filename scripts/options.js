@@ -81,6 +81,7 @@ function restoreOptions() {
 	});
 }
 
+// Hide the weather location options based on if the option is enabled
 function hideWeather() {
 	if(document.getElementById('enable-live-weather').checked) {
 		document.getElementById('weather').style.visibility = "visible";

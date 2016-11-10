@@ -64,7 +64,7 @@ function WeatherManager(zip, country) {
  				}
  			}
  		}
-	 
+
 	 	request.open("GET", url, true);
 	 	request.send();
 	 	timeout = setTimeout(weatherCheckLoop, 600000);
