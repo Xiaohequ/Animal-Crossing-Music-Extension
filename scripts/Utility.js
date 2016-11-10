@@ -21,13 +21,6 @@ function formatHour(time) {
 	return (time - 12) + 'p';
 }
 
-function toggleWeatherOptions(music) {
-	if(music === 'new-leaf-live' || music === ' wild-world-live')
-		document.getElementById('weather').style.visibility 	= "visible";
-	else
-		document.getElementById('weather').style.visibility 	= "hidden";
-}
-
 function printDebug(message) {
 	if (DEBUG_FLAG) console.log(message);
 }

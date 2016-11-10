@@ -10,6 +10,7 @@ function saveOptions() {
 	var zipCode             = document.getElementById('zip-code').value;
 	var countryCode         = document.getElementById('country-code').value;
 	var enableBadgeText     = document.getElementById('enable-badge').checked;
+	var enableLiveWeather   = document.getElementById('enable-live-weather').checked;
 
 	var music;
 	var currentSong;
@@ -34,9 +35,6 @@ function saveOptions() {
 	else if (document.getElementById('new-leaf-snowing').checked) {
 		music = 'new-leaf-snowing';
 	}
-	else if (document.getElementById('new-leaf-live').checked) {
-		music = 'new-leaf-live';
-	}
 	else if (document.getElementById('random').checked) {
 		music = 'random';
 	}
@@ -50,7 +48,8 @@ function saveOptions() {
 		enableTownTune     : enableTownTune,
 		zipCode            : zipCode,
 		countryCode        : countryCode,
-		enableBadgeText    : enableBadgeText
+		enableBadgeText    : enableBadgeText,
+		enableLiveWeather  : enableLiveWeather
 	}, function() { });
 }
 
@@ -64,7 +63,8 @@ function restoreOptions() {
 		enableTownTune     : true,
 		zipCode            : "98052",
 		countryCode        : "us",
-		enableBadgeText    : true
+		enableBadgeText    : true,
+		enableLiveWeather  : false
 	}, function(items) {
 		document.getElementById('volume').value                 = items.volume;
 		document.getElementById(items.music).checked            = true;
@@ -76,7 +76,19 @@ function restoreOptions() {
 		document.getElementById('zip-code').value               = items.zipCode;
 		document.getElementById('country-code').value           = items.countryCode;
 		document.getElementById('enable-badge').checked         = items.enableBadgeText;
+		document.getElementById('enable-live-weather').checked  = items.enableLiveWeather;
+		hideWeather();
 	});
+}
+
+function hideWeather() {
+	if(document.getElementById('enable-live-weather').checked) {
+		document.getElementById('weather').style.visibility = "visible";
+	}
+	else {
+		document.getElementById('weather').style.visibility = "hidden";
+	}
+	saveOptions();
 }
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
@@ -89,8 +101,6 @@ document.getElementById('wild-world-snowing').onclick   = saveOptions;
 document.getElementById('new-leaf').onclick             = saveOptions;
 document.getElementById('new-leaf-snowing').onclick     = saveOptions;
 document.getElementById('new-leaf-raining').onclick     = saveOptions;
-document.getElementById('new-leaf-live').onclick        = saveOptions;
-document.getElementById('new-leaf-live').onclick        = saveOptions;
 document.getElementById('random').onclick               = saveOptions;
 document.getElementById('no-kk').onclick                = saveOptions;
 document.getElementById('enable-kk').onclick            = saveOptions;
@@ -98,6 +108,7 @@ document.getElementById('always-kk').onclick            = saveOptions;
 document.getElementById('enable-badge').onclick         = saveOptions;
 document.getElementById('enable-notifications').onclick = saveOptions;
 document.getElementById('enable-town-tune').onclick     = saveOptions;
+document.getElementById('enable-live-weather').onclick  = hideWeather;
 document.getElementById('update-location').onclick      = saveOptions;
 
 // About/Help

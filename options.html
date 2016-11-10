@@ -73,9 +73,6 @@
 							<input id="new-leaf-snowing" name="music-choice" type="radio"><label for="new-leaf-snowing"><span><span></span></span>New Leaf (Snowing)</label>
 						</div>
 						<div class="radio">
-							<input id="new-leaf-live" name="music-choice" type="radio"><label for="new-leaf-live"><span><span></span></span>New Leaf (<a href="http://openweathermap.org/current">Live Weather</a>)</label>
-						</div>
-						<div class="radio">
 							<input id="random" name="music-choice" type="radio"><label for="random"><span><span></span></span>Random!</label>
 						</div>
 
@@ -115,9 +112,11 @@
 						</div>
 					</section>
 
-					<section id="weather">
-						<h3>Live Weather Location</h3>
-						<div class="text">
+					<section>
+						<h3>Live Weather</h3>
+						<div class="checkbox">
+						</div>
+						<div class="text" id="weather">
 								<input type="text" id="zip-code" value="618708">
 								<input type="text" id="country-code" value="ru">
 								<button type="button" id="update-location">Update Location</button>

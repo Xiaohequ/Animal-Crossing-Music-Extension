@@ -63,14 +63,7 @@ function StateManager() {
 	}
 
 	function isLive() {
-		return options.music == 'new-leaf-live' || options.music == 'wild-world-live';
-	}
-	
-	function getLiveGame() {
-		if(options.music == 'new-leaf-live')
-			return 'new-leaf';
-		else if(options.music == 'wild-world-live')
-			return 'wild-world';
+		return options.enableLiveWeather && (options.game == 'wild-world' || options.game == 'new-leaf');
 	}
 
 	// retrieve saved options
@@ -86,7 +79,8 @@ function StateManager() {
 			//enableAutoPause: false,
 			zipCode: "98052",
 			countryCode: "us",
-			enableBadgeText: true
+			enableBadgeText: true,
+			enableLiveWeather: false
 		}, function(items) {
 			options = items;
 			if (typeof callback === 'function') {
@@ -99,13 +93,12 @@ function StateManager() {
 	// we're using a live weather option.
 	function getMusic() {
 		if(isLive()) {
-			var game = getLiveGame();
 			if(weatherManager.getWeather() == "Rain")
-				return game + "-raining";
+				return options.music + "-raining";
 			else if(weatherManager.getWeather() == "Snow")
-				return game + "-snowing";
+				return options.music + "-snowing";
 			else
-				return game;
+				return options.music;
 		}
 		else {
 			if (options.music === "random"){
