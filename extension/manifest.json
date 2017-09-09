@@ -1,0 +1,26 @@
+{
+   "background": {
+      "scripts": [ "src/Utility.js", "src/tune_player.js", "src/TownTuneManager.js", "src/TimeKeeper.js", "src/LoopTimes.js", "src/WeatherManager.js", "src/AudioManager.js", "src/BadgeManager.js", "src/NotificationManager.js", "src/StateManager.js", "src/main.js" ]
+   },
+   "browser_action": {
+      "default_icon": {
+		  "38": "assets/img/icon_38_kk_playing.png"
+      },
+      "default_title": "Animal Crossing Music"
+   },
+   "description": "Play Animal Crossing's smooth background music in real-time throughout your day.",
+   "icons": {
+      "128": "assets/img/icon_128_kk.png",
+      "38": "assets/img/icon_32_kk.png"
+   },
+   "manifest_version": 3,
+   "name": "Animal Crossing Music",
+   "options_page": "assets/options.html",
+   "permissions": [ 
+		"notifications", 
+		"storage", 
+		"http://api.openweathermap.org/" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "3.6",
+   "web_accessible_resources": [ "assets/img/clock.png", "assets/audio/bells.ogg" ]
+}
