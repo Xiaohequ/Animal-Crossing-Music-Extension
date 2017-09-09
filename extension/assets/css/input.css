@@ -3,21 +3,16 @@
 
 html, body {
   font-family: ACheader !important;
-  background: linear-gradient(#a5f4ff, #d8faff);
+/*   background: linear-gradient(#a5f4ff, #d8faff); */
   background-attachment: fixed;
   margin, padding: 0;
   height: 100%;
 }
 
-label, p, input {
+label, p, input, button {
   font-family: ACtext !important;
 }
 
-#house {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-}
 
 .hidden {
   display: none;

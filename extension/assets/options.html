@@ -11,16 +11,98 @@
 	<script src="../src/tune_editor.js"></script>
 	<style>
 		.chrome-bootstrap .frame .view {
-			-webkit-margin-start: 180px;
+			-webkit-margin-start: 225px;
+		}
+		.background {
+			background-image: url("img/background.png");
+			background-size: cover;
+		}
+						
+		.view .content{
+			margin-bottom: 10px;
+			background-color: white;
+/* 			background-image: url("img/config-panel.png"); */
+/* 			background-size: cover; */
+
+			padding-left: 50px;
+			padding-right: 50px;
+			padding-bottom: 30px;
+			border-radius: 12px;
+		}
+				
+		.view header{
+			background-color:white;
+			padding: 10px 50px;
+			border-radius: 12px;
+		}
+		
+		
+		img.logo{
+			background-size: 180px;
+			width: 180px;
+		}
+		
+		.navigation .menu{
+			margin-top: 1em;
+    		text-align: center;
+		}
+		
+		.navigation .menu li a{
+			height: 50px;
+			background-size: auto 50px;
+    		background-repeat: no-repeat;
+    		background-position: center; 
+    		padding: 10px 0;
+		}
+		
+		.navigation .menu li a {
+			color: white;
+			line-height: 3em;
+    		vertical-align: middle;
+		}
+
+		.bottom-decoration{
+			background-image: url("img/house.png");
+		    background-size: 150px auto;
+		    background-repeat: no-repeat;
+		    width: 150px;
+		    height: auto;
+		    min-height: 110px;
+		    position: absolute;
+		    right: 0;
+		    bottom: 0;
+		}
+		
+		.option-onglet-link a{
+			background-image: url("img/woodplank-sign1.png");
+		}
+		.town-tune-link a{
+			background-image: url("img/woodplank-sign1.png");
+		}
+		
+		.help-link a{
+			background-image: url("img/woodplank-sign3.png");
+		}
+		
+		.logo-container{
+			padding: 10px;
+		}
+		
+		.chrome-bootstrap ul.menu li a{
+			color: white;
+			line-height: 3em;
+		}
+		.chrome-bootstrap ul.menu li.selected a {
+			color: rgb(255, 226, 129);
 		}
 	</style>
 </head>
-<body class="chrome-bootstrap">
+<body class="chrome-bootstrap background" >
 	<div class="frame">
-		<div class="navigation">
-			<img src="img/sign.png" width="150">
-			<ul class="menu" style="margin-top: 4em;">
-				<li class="selected">
+		<div class="navigation" style="width: 200px;">
+			<div class="logo-container"><img src="img/sign.png" class="logo"></div>
+			<ul class="menu">
+				<li class="option-onglet-link selected">
 					<a href="#options">Options</a>
 				</li>
 				<li class="town-tune-link">
@@ -124,7 +206,8 @@
 								<label>(First box: <a href="http://www.geonames.org/postal-codes/" target="_blank">zip code</a>, second: <a href = "https://countrycode.org/" target="_blank">country code</a>)</label>
 						</div>
 					</section>
-
+					
+					<section class="bottom-decoration"></section>
 				</div>
 			</div>
 
@@ -143,15 +226,12 @@
 						<div class="staff staff1"></div>
 						<div class="staff staff2"></div>
 					</section>
-
-					<header>
-						<h1 style="padding: 0; margin: 0;"></h1>
+					<section>
 						<div class="controls">
-							<button class="play-tune">Play!</button>
-							<div class="spacer"></div>
 							<button class="save-tune">Save</button>
+							<button class="play-tune">Play!</button>
 						</div>
-					</header>
+					</section>
 				</div>
 			</div>
 
@@ -175,7 +255,7 @@
 						<button id="help-us-out">Help us make the best AC extension ever!</button>
 					</div>
 
-					<div id="version-container">Version 3.1</div>
+					<div id="version-container">Version 3.6</div>
 
 					<div id="product-container">
 						<h3>Animal Crossing Music Developers:</h3>
@@ -190,14 +270,13 @@
 						<p>Antonio Luis Roman-Naranjo Varela</p>
 						<p>Extension originally created and maintained by Andrex from NeoGAF</p>
 						<p>Extension improved by blazescorch2</p>
+						<p>Extension improved by william</p>
 						<p>Idea for extension taken from <a href="http://tane.us/ac/">tane.us</a>.</p>
 						<p>This option page uses <a href="https://github.com/roykolak/chrome-bootstrap">Chrome Bootstrap</a> by Roy Kolak under the MIT License.</p>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		<img id='house' src='img/house.png' width='150'/>
 	</div>
 
 	<script src="../src/options.js"></script>
