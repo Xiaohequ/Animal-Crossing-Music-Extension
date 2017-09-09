@@ -45,3 +45,7 @@ Animal-Crossing-Music-Extension.zip
 *.ogg
 *.mp3
 *.ai
+
+
+.settings
+.project
