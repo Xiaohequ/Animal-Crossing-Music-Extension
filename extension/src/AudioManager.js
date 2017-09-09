@@ -3,7 +3,7 @@
 'use strict';
 
 function AudioManager(addEventListener, isTownTune) {
-	const audioFolder = "../audio";
+	const audioFolder = "../assets/audio";
 
 	var audio = document.createElement('audio');
 	var killLoopTimeout;
@@ -32,7 +32,8 @@ function AudioManager(addEventListener, isTownTune) {
 	// any exist
 	function playHourSong(game, hour, skipIntro) {
 		audio.loop = true;
-		audio.src = audioFolder + game + '/' + formatHour(hour) + 'm.ogg';
+		audio.src = audioFolder + '/' + game + '/' + formatHour(hour) + 'm.ogg';
+		console.log(audio.src);
 		var loopTime = (loopTimes[game] || {})[hour];
 		// set up loop points if loopTime is set up for this
 		// game and hour

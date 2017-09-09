@@ -27,17 +27,17 @@ function BadgeManager(addEventListener, isEnabled) {
 		if(isPlaying) {
 			if(isKK) {
 				chrome.browserAction.setIcon({
-					path : "img/icon_38_kk_playing.png"
+					path : "../assets/img/icon_38_kk_playing.png"
 				});
 			} else {
 				chrome.browserAction.setIcon({
-					path : "img/icon_38_leaf_playing.png"
+					path : "../assets/img/icon_38_leaf_playing.png"
 				});
 			}		
 		}
 		else {
 		chrome.browserAction.setIcon({
-			path : "img/icon_38_leaf_paused.png"
+			path : "../assets/img/icon_38_leaf_paused.png"
 		});
 		}
 	}

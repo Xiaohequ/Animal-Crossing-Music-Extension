@@ -3,13 +3,14 @@
 'use strict';
 
 function NotificationManager(addEventListener, isEnabled) {
+	const clockPngPath = "../assets/img/clock.png";
 
 	function popMusicNotification(hour) {
 		chrome.notifications.create('animal-crossing-music', {
 			type: 'basic',
 			title: 'Animal Crossing Music',
 			message: 'It is now ' + formatHour(hour) + 'm!',
-			iconUrl: '../img/clock.png'
+			iconUrl: clockPngPath
 		});
 	}
 	
@@ -30,7 +31,7 @@ function NotificationManager(addEventListener, isEnabled) {
 			type: 'basic',
 			title: 'Animal Crossing Music',
 			message: 'It is now ' + weatherString + '!',
-			iconUrl: '../img/clock.png'
+			iconUrl: clockPngPath
 		});
 	}
 
@@ -39,7 +40,7 @@ function NotificationManager(addEventListener, isEnabled) {
 			type: 'basic',
 			title: 'Animal Crossing Music',
 			message: 'K.K. Slider has started to play!',
-			iconUrl: '../img/clock.png'
+			iconUrl: clockPngPath
 		});
 
 	}
