@@ -12,31 +12,15 @@ function saveOptions() {
 	var enableBadgeText     = document.getElementById('enable-badge').checked;
 	var enableLiveWeather   = document.getElementById('enable-live-weather').checked;
 
+	var gameChoices = document.getElementsByName("music-choice");
 	var music;
-	var currentSong;
-	if (document.getElementById('animal-forrest').checked) {
-		music = 'animal-forrest';
-	}
-	else if (document.getElementById('wild-world').checked) {
-		music = 'wild-world';
-	}
-	else if (document.getElementById('wild-world-raining').checked) {
-		music = 'wild-world-raining';
-	}
-	else if (document.getElementById('wild-world-snowing').checked) {
-		music = 'wild-world-snowing';
-	}
-	else if (document.getElementById('new-leaf').checked) {
-		music = 'new-leaf';
-	}
-	else if (document.getElementById('new-leaf-raining').checked) {
-		music = 'new-leaf-raining';
-	}
-	else if (document.getElementById('new-leaf-snowing').checked) {
-		music = 'new-leaf-snowing';
-	}
-	else if (document.getElementById('random').checked) {
-		music = 'random';
+	var choice;
+	for(var i=0; i < gameChoices.length; i++){
+		choice = gameChoices[i];
+		if(choice.checked){
+			music = choice.value;
+			break;
+		}
 	}
 
 	chrome.storage.sync.set({
@@ -67,7 +51,11 @@ function restoreOptions() {
 		enableLiveWeather  : false
 	}, function(items) {
 		document.getElementById('volume').value                 = items.volume;
-		document.getElementById(items.music).checked            = true;
+		if(items.music === "-1"){
+			document.getElementById("random").checked = true;
+		}else{
+			document.getElementById("music-" + items.music).checked = true;
+		}
 		document.getElementById('enable-notifications').checked = items.enableNotifications;
 		document.getElementById('no-kk').checked                = true;
 		document.getElementById('enable-kk').checked            = items.enableKK;
@@ -94,15 +82,12 @@ function hideWeather() {
 
 document.addEventListener('DOMContentLoaded', restoreOptions);
 
+//music select radio list
+var gameChoices = document.getElementsByName("music-choice");
+for(var i=0; i < gameChoices.length; i++){
+	gameChoices[i].onclick = saveOptions;
+}
 document.getElementById('volume').onchange              = saveOptions;
-document.getElementById('animal-forrest').onclick       = saveOptions;
-document.getElementById('wild-world').onclick           = saveOptions;
-document.getElementById('wild-world-raining').onclick   = saveOptions;
-document.getElementById('wild-world-snowing').onclick   = saveOptions;
-document.getElementById('new-leaf').onclick             = saveOptions;
-document.getElementById('new-leaf-snowing').onclick     = saveOptions;
-document.getElementById('new-leaf-raining').onclick     = saveOptions;
-document.getElementById('random').onclick               = saveOptions;
 document.getElementById('no-kk').onclick                = saveOptions;
 document.getElementById('enable-kk').onclick            = saveOptions;
 document.getElementById('always-kk').onclick            = saveOptions;

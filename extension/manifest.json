@@ -1,7 +1,8 @@
 {
    "background": {
-      "scripts": [ "src/Utility.js", "src/tune_player.js", "src/TownTuneManager.js", "src/TimeKeeper.js", "src/LoopTimes.js", "src/WeatherManager.js", "src/AudioManager.js", "src/BadgeManager.js", "src/NotificationManager.js", "src/StateManager.js", "src/main.js" ]
+   		"page": "assets/background.html"
    },
+   "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
    "browser_action": {
       "default_icon": {
 		  "38": "assets/img/icon_38_kk_playing.png"
@@ -19,8 +20,10 @@
    "permissions": [ 
 		"notifications", 
 		"storage", 
-		"http://api.openweathermap.org/" ],
+		"unlimitedStorage",
+		"http://api.openweathermap.org/"
+	],
    "update_url": "https://clients2.google.com/service/update2/crx",
    "version": "3.6",
-   "web_accessible_resources": [ "assets/img/clock.png", "assets/audio/bells.ogg" ]
+   "web_accessible_resources": [ "assets/img/clock.png", "assets/audio/bells.ogg"]
 }

@@ -9,7 +9,7 @@ function NotificationManager(addEventListener, isEnabled) {
 		chrome.notifications.create('animal-crossing-music', {
 			type: 'basic',
 			title: 'Animal Crossing Music',
-			message: 'It is now ' + formatHour(hour) + 'm!',
+			message: 'It is now ' + formatHour(hour) + '!',
 			iconUrl: clockPngPath
 		});
 	}

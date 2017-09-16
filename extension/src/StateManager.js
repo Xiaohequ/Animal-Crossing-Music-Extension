@@ -26,22 +26,22 @@ function StateManager() {
 	this.activate = function() {
 		isKKTime = timeKeeper.getDay() == 6 && timeKeeper.getHour() >= 20;
 		getSyncedOptions(function() {
-		if(!weatherManager) {
-			weatherManager = new WeatherManager(options.zipCode, options.countryCode);
-			weatherManager.registerChangeCallback(function() {
-				if(!isKK() && isLive()) {
-					notifyListeners("gameChange", [timeKeeper.getHour(), getMusic()]);
-					notifyListeners("weatherChange", [weatherManager.getWeather()]);
-				}
-			});
-		}
-
+			if(!weatherManager) {
+				weatherManager = new WeatherManager(options.zipCode, options.countryCode);
+				weatherManager.registerChangeCallback(function() {
+					if(!isKK() && isLive()) {
+						notifyListeners("gameChange", [timeKeeper.getHour(), getChoosenGame(), false, weatherManager.getWeather()]);
+						notifyListeners("weatherChange", [weatherManager.getWeather()]);
+					}
+				});
+			}
+	
 			notifyListeners("volume", [options.volume]);
 			if (isKK()) {
 				notifyListeners("kkStart");
 			}
 			else {
-				notifyListeners("hourMusic", [timeKeeper.getHour(), getMusic(), false]);
+				notifyHourMusic(false);
 			}
 		});
 	};
@@ -63,14 +63,14 @@ function StateManager() {
 	}
 
 	function isLive() {
-		return options.enableLiveWeather && (options.game == 'wild-world' || options.game == 'new-leaf');
+		return options.enableLiveWeather && (options.music.startsWith("2") || options.music.startsWith("3")); //wild world or new leaf chosen
 	}
 
 	// retrieve saved options
 	function getSyncedOptions(callback) {
 		chrome.storage.sync.get({
 			volume: 0.5,
-			music: 'new-leaf',
+			music: '10',
 			enableNotifications: true,
 			enableKK: true,
 			alwaysKK: false,
@@ -88,14 +88,23 @@ function StateManager() {
 			}
 		});
 	}
+	
+	function getCurrentWeather(){
+		return isLive() ? weatherManager.getWeather() : "";
+	}
+	
+	function getChoosenGame(){
+		return options.music;
+	}
 
 	// Gets the current game based on the option, and weather if
 	// we're using a live weather option.
 	function getMusic() {
 		if(isLive()) {
-			if(weatherManager.getWeather() == "Rain")
+			var currentWeather = weatherManager.getWeather();
+			if(currentWeather === "Rain")
 				return options.music + "-raining";
-			else if(weatherManager.getWeather() == "Snow")
+			else if(currentWeather === "Snow")
 				return options.music + "-snowing";
 			else
 				return options.music;
@@ -125,9 +134,13 @@ function StateManager() {
 			notifyListeners("kkStart");
 		}
 		else if (!isKK()) {
-			notifyListeners("hourMusic", [hour, getMusic(), true]);
+			notifyHourMusic(true);
 		}
 	});
+	
+	function notifyHourMusic(playTownTune){
+		notifyListeners("hourMusic", [timeKeeper.getHour(), getChoosenGame(), playTownTune, getCurrentWeather()]);
+	}
 
 	// Update our options object if stored options changes, and notify listeners
 	// of any pertinent changes.
@@ -151,7 +164,7 @@ function StateManager() {
 				notifyListeners("kkStart");
 			}
 			if (!isKK() && wasKK) {
-				notifyListeners("hourMusic", [timeKeeper.getHour(), getMusic(), false]);
+				notifyHourMusic(false);
 			}
 		});
 	});
@@ -174,7 +187,7 @@ function StateManager() {
 	if(DEBUG_FLAG) {
 		window.notify = notifyListeners;
 		window.setTime = function(hour, playTownTune) {
-			notifyListeners("hourMusic", [hour, options.music, playTownTune]);
+			notifyHourMusic(playTownTune);
 		};
 	}
 

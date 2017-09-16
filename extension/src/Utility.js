@@ -10,15 +10,15 @@ function formatHour(time) {
 		return '';
 	}
 	if (time === 0) {
-		return '12a';
+		return '12am';
 	}
 	if (time === 12) {
-		return '12p';
+		return '12pm';
 	}
 	if (time < 13) {
-		return time + 'a';
+		return time + 'am';
 	}
-	return (time - 12) + 'p';
+	return (time - 12) + 'pm';
 }
 
 function audioPlaying() {
@@ -27,6 +27,10 @@ function audioPlaying() {
 	}, function(tabs) {
 		return tabs.length;
 	});
+}
+
+function getRandomNumber(start, end){
+	return Math.floor(Math.random() * end) + start;
 }
 
 function printDebug(message) {

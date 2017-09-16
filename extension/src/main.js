@@ -12,7 +12,6 @@
 	var badgeManager = new BadgeManager(stateManager.registerCallback, function() {
 		return stateManager.getOption("enableBadgeText");
 	});
-	
+
 	stateManager.activate();
-	
 })();
