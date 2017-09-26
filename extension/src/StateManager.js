@@ -170,6 +170,7 @@ function StateManager() {
 	});
 
 	// play/pause when user clicks the extension icon
+	/*// extension function
 	chrome.browserAction.onClicked.addListener(function() {
 		chrome.storage.sync.set({ paused: !options.paused }, function() {
 			getSyncedOptions(function() {
@@ -181,6 +182,7 @@ function StateManager() {
 			});
 		});
 	});
+	*/
 
 	// Gives easy access to the notifyListeners function if
 	// we're debugging.

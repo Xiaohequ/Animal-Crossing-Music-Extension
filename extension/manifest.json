@@ -1,29 +1,22 @@
 {
-   "background": {
-   		"page": "assets/background.html"
-   },
-   "content_security_policy": "script-src 'self' https://apis.google.com; object-src 'self'",
-   "browser_action": {
-      "default_icon": {
-		  "38": "assets/img/icon_38_kk_playing.png"
-      },
-      "default_title": "Animal Crossing Music"
-   },
+   "name": "Animal Crossing Music (online)",
    "description": "Play Animal Crossing's smooth background music in real-time throughout your day.",
+   "version": "3.6",
+   "manifest_version": 2,
+   "app":{
+	   "background": {
+	   		"scripts": ["src/background.js"]
+	   }
+   },
    "icons": {
       "128": "assets/img/icon_128_kk.png",
-      "38": "assets/img/icon_32_kk.png"
+      "38": "assets/img/icon_38_kk_playing.png"
    },
-   "manifest_version": 3,
-   "name": "Animal Crossing Music",
-   "options_page": "assets/options.html",
    "permissions": [ 
 		"notifications", 
 		"storage", 
-		"unlimitedStorage",
-		"http://api.openweathermap.org/"
+		"http://api.openweathermap.org/",
+		"https://s3.eu-west-2.amazonaws.com/"
 	],
-   "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "3.6",
-   "web_accessible_resources": [ "assets/img/clock.png", "assets/audio/bells.ogg"]
+   "update_url": "https://clients2.google.com/service/update2/crx"
 }

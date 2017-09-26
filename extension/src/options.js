@@ -40,7 +40,7 @@ function saveOptions() {
 function restoreOptions() {
 	chrome.storage.sync.get({
 		volume             : 0.5,
-		music              : 'new-leaf',
+		music              : '30', //new leaf
 		enableNotifications: true,
 		enableKK           : true,
 		alwaysKK           : false,
