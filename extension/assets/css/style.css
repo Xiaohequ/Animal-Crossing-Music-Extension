@@ -38,7 +38,7 @@
 
 img.logo{
 	background-size: 180px;
-	width: 180px;
+	width: 130px;
 }
 
 .navigation .menu{
@@ -84,7 +84,10 @@ img.logo{
 }
 
 .logo-container{
-	padding: 10px;
+	padding-top: 10px;
+	width: 100%;
+    text-align: center;
+    -webkit-app-region: drag;
 }
 
 table.developper-table{
