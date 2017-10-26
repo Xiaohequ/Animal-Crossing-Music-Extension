@@ -13,19 +13,19 @@ function saveOptions() {
 	var enableLiveWeather   = document.getElementById('enable-live-weather').checked;
 
 	var gameChoices = document.getElementsByName("music-choice");
-	var music;
+	var checkedMusic = [];
 	var choice;
 	for(var i=0; i < gameChoices.length; i++){
 		choice = gameChoices[i];
 		if(choice.checked){
-			music = choice.value;
-			break;
+			checkedMusic.push(choice.value);
 		}
 	}
 
 	chrome.storage.sync.set({
 		volume             : volume,
-		music              : music,
+		music              : checkedMusic[0],
+		games              : checkedMusic,
 		enableNotifications: enableNotifications,
 		enableKK           : enableKK,
 		alwaysKK           : alwaysKK,

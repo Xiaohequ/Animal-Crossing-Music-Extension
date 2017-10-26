@@ -2,7 +2,7 @@
 
 'use strict';
 
-var DEBUG_FLAG = false;
+var DEBUG_FLAG = true;
 
 // format text for the badge and for the song URL
 function formatHour(time) {
@@ -35,4 +35,19 @@ function getRandomNumber(start, end){
 
 function printDebug(message) {
 	if (DEBUG_FLAG) console.log(message);
+}
+
+function arrayDifference(a1, a2) {
+	  var result = [];
+	  for (var i = 0; i < a1.length; i++) {
+	    if (a2.indexOf(a1[i]) === -1) {
+	      result.push(a1[i]);
+	    }
+	  }
+	  for (i = 0; i < a2.length; i++) {
+	    if (a1.indexOf(a2[i]) === -1) {
+	      result.push(a2[i]);
+	    }
+	  }
+	  return result;
 }

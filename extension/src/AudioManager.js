@@ -3,13 +3,51 @@
 'use strict';
 
 function AudioManager(addEventListener, isTownTune) {
+	var mThis = this;
 	const audioFolder = "../assets/audio";
 
+	mThis.playList = [];
+	mThis.currentAudio = null;
+	mThis.currentHour = null;
 	var audio = document.createElement('audio');
 	var killLoopTimeout;
 	var killFadeInterval;
 	var townTuneManager = new TownTuneManager();
 	const resourceManager = new ResourceManager();
+	
+	//add event listener
+	addEventListener("hourMusic", playHourlyMusic);
+	addEventListener("kkStart", playKKMusic);
+	addEventListener("gameChange", playHourlyMusic);
+	addEventListener("pause", function() {
+		clearLoop();
+		fadeOutAudio(300);
+	});
+	addEventListener("volume", function(newVol) {
+		audio.volume = newVol;
+	});
+	$.subscribe("optionChange", function(changes){
+		console.log("audio manager: on option change: ");
+		//volume change
+		if(changes.volume){
+			audio.volume = changes.volume.newValue;
+		}
+		//games audio change
+		if(changes.games){
+			//change audio
+			console.log(changes.games);
+			console.log(mThis);
+			//add new song to the playlist
+			var newSong = arrayDifference(changes.games.oldValue, changes.games.newValue);
+			mThis.playList.push(newSong[0]);
+			//reset audio if current playing audio removed from playList
+			if(mThis.playList.length > 0 && mThis.playList.indexOf(mThis.currentAudio) === -1){ //current audio not in playlist any more
+				//change audio to first audio in the play list
+				playHourSong(mThis.playList[0], mThis.currentHour);
+			}//else do nothing
+		}
+	});
+	
 
 	// isHourChange is true if it's an actual hour change,
 	// false if we're activating music in the middle of an hour
@@ -17,6 +55,7 @@ function AudioManager(addEventListener, isTownTune) {
 		clearLoop();
 		audio.loop = true;
 		audio.removeEventListener("ended", playKKSong);
+		//handle hour change , play hour tune 
 		const fadeOutLength = isHourChange ? 3000 : 500;
 		fadeOutAudio(fadeOutLength, function() {
 			if (isHourChange && isTownTune()) {
@@ -28,21 +67,11 @@ function AudioManager(addEventListener, isTownTune) {
 			}
 		});
 	}
-	
-	function playAudio(game, hour, weather){
-		resourceManager.getResource(game, hour, weather).then(function(audioSrc){
-			//setup audio
-			audio.src = audioSrc;
-			//play audio
-			audio.play();
-		});
-	}
 
 	// Plays a song for an hour, setting up loop times if
 	// any exist
 	function playHourSong(game, hour, skipIntro, weather) {
-		audio.loop = true;
-//		audio.src = audioFolder + '/' + game + '/' + formatHour(hour) + 'm.ogg';
+		audio.loop = false;
 		var loopTime = (loopTimes[game] || {})[hour];
 		// set up loop points if loopTime is set up for this
 		// game and hour
@@ -64,9 +93,37 @@ function AudioManager(addEventListener, isTownTune) {
 				};
 			}
 		}
-//		audio.play();
 		playAudio(game, hour, weather);
+		//add ended listener
+		audio.addEventListener("ended", playNextSong);
 	}
+	
+	function playNextSong(){
+		//play next song on the play list
+		var currentPlayListIndex = mThis.playList.indexOf(mThis.currentAudio);
+		currentPlayListIndex++;
+		//looping play list
+		if(currentPlayListIndex > mThis.playList.length - 1) currentPlayListIndex = 0;
+		//get next song	
+		var nextSong = mThis.playList[currentPlayListIndex];
+
+		console.log("play next song: " + nextSong);
+		//play next song
+		playAudio(nextSong, mThis.currentHour);
+	}
+	
+	
+	function playAudio(game, hour, weather){
+		mThis.currentAudio = game;
+		mThis.currentHour = hour;
+		resourceManager.getResource(game, hour, weather).then(function(audioSrc){
+			//setup audio
+			audio.src = audioSrc;
+			//play audio
+			audio.play();
+		});
+	}
+
 
 	function playKKMusic() {
 		clearLoop();
@@ -116,20 +173,4 @@ function AudioManager(addEventListener, isTownTune) {
 			}
 		}
 	}
-
-	addEventListener("hourMusic", playHourlyMusic);
-
-	addEventListener("kkStart", playKKMusic);
-
-	addEventListener("gameChange", playHourlyMusic);
-
-	addEventListener("pause", function() {
-		clearLoop();
-		fadeOutAudio(300);
-	});
-
-	addEventListener("volume", function(newVol) {
-		audio.volume = newVol;
-	});
-
 }

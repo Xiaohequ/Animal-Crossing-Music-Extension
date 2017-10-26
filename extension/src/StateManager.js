@@ -4,6 +4,20 @@
 'use strict';
 
 function StateManager() {
+	const defaultOptions = {
+			volume: 0.5,
+			music: '10',
+			enableNotifications: true,
+			enableKK: true,
+			alwaysKK: false,
+			paused: false,
+			enableTownTune: true,
+			//enableAutoPause: false,
+			zipCode: "98052",
+			countryCode: "us",
+			enableBadgeText: true,
+			enableLiveWeather: false
+		};
 
 	var self = this;
 
@@ -13,6 +27,9 @@ function StateManager() {
 	var timeKeeper = new TimeKeeper();
 	var weatherManager;
 	var isKKTime;
+	
+	//register event listeners
+	//TODO
 
 	this.registerCallback = function(event, callback) {
 		callbacks[event] = callbacks[event] || [];
@@ -25,7 +42,8 @@ function StateManager() {
 
 	this.activate = function() {
 		isKKTime = timeKeeper.getDay() == 6 && timeKeeper.getHour() >= 20;
-		getSyncedOptions(function() {
+		getSavedOptions(function(items) {
+			options = items;
 			if(!weatherManager) {
 				weatherManager = new WeatherManager(options.zipCode, options.countryCode);
 				weatherManager.registerChangeCallback(function() {
@@ -67,24 +85,10 @@ function StateManager() {
 	}
 
 	// retrieve saved options
-	function getSyncedOptions(callback) {
-		chrome.storage.sync.get({
-			volume: 0.5,
-			music: '10',
-			enableNotifications: true,
-			enableKK: true,
-			alwaysKK: false,
-			paused: false,
-			enableTownTune: true,
-			//enableAutoPause: false,
-			zipCode: "98052",
-			countryCode: "us",
-			enableBadgeText: true,
-			enableLiveWeather: false
-		}, function(items) {
-			options = items;
+	function getSavedOptions(callback) {
+		chrome.storage.sync.get(defaultOptions, function(items) {
 			if (typeof callback === 'function') {
-				callback();
+				callback(items);
 			}
 		});
 	}
@@ -145,35 +149,47 @@ function StateManager() {
 	// Update our options object if stored options changes, and notify listeners
 	// of any pertinent changes.
 	chrome.storage.onChanged.addListener(function(changes, namespace) {
+		console.log("option change occured: ");
+		console.log(changes);
+		
+		$.publish("optionChange", changes);
+		
+		//TODO optimize
 		var wasKK = isKK();
 		var oldMusic = getMusic();
-		getSyncedOptions(function() {
+		//define options reader
+		var optionsReader = function(items) {
+			options = items;
+			//notify manages option changes
 			if(typeof changes.zipCode !== 'undefined') {
 				weatherManager.setZip(options.zipCode);
 			}
 			if(typeof changes.countryCode !== 'undefined') {
 				weatherManager.setCountry(options.countryCode);
 			}
-			if (typeof changes.volume !== 'undefined') {
-				notifyListeners("volume", [options.volume]);
-			}
-			if (typeof changes.music !== 'undefined' && !isKK() && getMusic() != oldMusic) {
-				notifyListeners("gameChange", [timeKeeper.getHour(), getMusic()]);
-			}
+//			if (typeof changes.volume !== 'undefined') {
+//				notifyListeners("volume", [changes.volume.newValue]);
+//			}
+//			if (typeof changes.music !== 'undefined' && !isKK() && getMusic() != oldMusic) {
+//				notifyListeners("gameChange", [timeKeeper.getHour(), getMusic()]);
+//			}
 			if (isKK() && !wasKK) {
 				notifyListeners("kkStart");
 			}
 			if (!isKK() && wasKK) {
 				notifyHourMusic(false);
 			}
-		});
+		};
+		
+		//read saved options
+		chrome.storage.sync.get(defaultOptions, optionsReader);
 	});
 
 	// play/pause when user clicks the extension icon
 	/*// extension function
 	chrome.browserAction.onClicked.addListener(function() {
 		chrome.storage.sync.set({ paused: !options.paused }, function() {
-			getSyncedOptions(function() {
+			getSavedOptions(function() {
 				if (options.paused) {
 					notifyListeners("pause");
 				} else {
