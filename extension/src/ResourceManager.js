@@ -14,20 +14,26 @@ function ResourceManager(){
 			3: "new-leaf",
 	};
 	const kkSongFolder = "kk-songs";
-	var audiosRepositoryUrl = "https://s3.eu-west-2.amazonaws.com/animal-crossing-music/";
-	console.log("Resouce manager start");
-	var resourceManager = this;
+	const audiosRepositoryUrl = "https://s3.eu-west-2.amazonaws.com/animal-crossing-music/";
+	
+	printDebug("Resouce manager start");
+	var mthis = this;
+	mthis.currentDowload = {game: null, hour: null, weather: null};
+	mthis.downloadCompleteNotifer = null;
+	mthis.downloadFaildNotifer = null;
 	//download manager
 	var queue = new createjs.LoadQueue();
+	queue.on("complete", onDownloadCompleteListener, mthis);
+	queue.on("error", onDownloadFailListener);
 	//audio cache
-	var audioCache = {animalForest: {am2: ""}};
-		 
+	var audioCache = {};
+
 	 // ************* *******************
 
 	 this.getResource = function(game, hour, weather){
 		 //handle random game generation
 		 game = _getFinalGame(game, weather);
-		 console.log("getResource: " + game + " h: " + hour + " w: " + weather);
+		 printDebug("getResource( g: " + game + " h: " + hour + " w: " + weather + " )");
 		 return new Promise(function(resolve, reject){
 			 //get audio file of game & name
 			 var audioSrc;
@@ -37,27 +43,36 @@ function ResourceManager(){
 				 resolve(getAudioCache(game, hour, weather)); 
 			 }else{
 				 //-if not found then download
-				 //handle download event
-				 queue.on("complete", function(){
-					 console.log("download complete for: " + game + "--" + formatHour(hour));
-					 //-download complete: store file in cache
-					 var audioSrc = queue.getResult("sound").src;
-					 //store in cache
-					 pushAudioCache(game, hour, weather, audioSrc);
-					 //ready for playback: return back audio src
-					 resolve(audioSrc);
-				 }, resourceManager);
-				 queue.on("error", function(e){
-					 console.error(e);
-					 reject(e);
-				 });
+				 mthis.currentDowload = {game: game, hour: hour, weather: weather};
+				//handle download event
+				 mthis.downloadCompleteNotifer = resolve;
+				 mthis.downloadFaildNotifer = reject;
+	
 				 //start download
 				 var urlStr = _getResource(game, hour);
-				 console.log("download: " + urlStr);
-				 queue.loadFile({id:"sound", src: urlStr}); //--get url in file
+				 printDebug("download: " + urlStr);
+				 queue.loadFile({id:"sound", src: urlStr});
 			 }
 		 });
 	 }
+	 
+	function onDownloadCompleteListener(){
+		 printDebug("download complete for: " + mthis.currentDowload.game + "--" + formatHour(mthis.currentDowload.hour));
+		 //-download complete: store file in cache
+		 var audioSrc = queue.getResult("sound").src;
+		 //store in cache
+		 pushAudioCache(mthis.currentDowload.game, mthis.currentDowload.hour, mthis.currentDowload.weather, audioSrc);
+		 //ready for playback: return back audio src
+		 if(typeof mthis.downloadCompleteNotifer === 'function')
+			 mthis.downloadCompleteNotifer(audioSrc);
+	}
+	
+	function onDownloadFailListener(){
+		 console.error(e);
+		 if(typeof mthis.downloadFaildNotifer === 'function')
+			 mthis.downloadFaildNotifer(e);
+	}
+	
 	 
 	 function _getFinalGame(game, weather){
 		 var gameRef = game.charAt(0);
@@ -111,7 +126,7 @@ function ResourceManager(){
 	 }
 	 
 	 function pushAudioCache(game, hour, weather, src){
-		 console.log("cache: " + game + " - " + hour);
+		 printDebug("cache: " + game + " - " + hour);
 //		 audioCache[game][name] = src;
 	 }
 }

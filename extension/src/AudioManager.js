@@ -6,10 +6,13 @@ function AudioManager(addEventListener, isTownTune) {
 	var mThis = this;
 	const audioFolder = "../assets/audio";
 
-	mThis.playList = [];
-	mThis.currentAudio = null;
+	mThis.gamelist = [];
+	mThis.currentGame = null;
 	mThis.currentHour = null;
+	mThis.randomGame = false;
 	var audio = document.createElement('audio');
+	//add ended listener
+	audio.addEventListener("ended", playNextSong);
 	var killLoopTimeout;
 	var killFadeInterval;
 	var townTuneManager = new TownTuneManager();
@@ -23,11 +26,8 @@ function AudioManager(addEventListener, isTownTune) {
 		clearLoop();
 		fadeOutAudio(300);
 	});
-	addEventListener("volume", function(newVol) {
-		audio.volume = newVol;
-	});
 	$.subscribe("optionChange", function(changes){
-		console.log("audio manager: on option change: ");
+		printDebug("audio manager: on option change: ");
 		//volume change
 		if(changes.volume){
 			audio.volume = changes.volume.newValue;
@@ -35,20 +35,38 @@ function AudioManager(addEventListener, isTownTune) {
 		//games audio change
 		if(changes.games){
 			//change audio
-			console.log(changes.games);
-			console.log(mThis);
-			//add new song to the playlist
-			var newSong = arrayDifference(changes.games.oldValue, changes.games.newValue);
-			mThis.playList.push(newSong[0]);
-			//reset audio if current playing audio removed from playList
-			if(mThis.playList.length > 0 && mThis.playList.indexOf(mThis.currentAudio) === -1){ //current audio not in playlist any more
-				//change audio to first audio in the play list
-				playHourSong(mThis.playList[0], mThis.currentHour);
-			}//else do nothing
+			//add new song to the gamelist or delete old song
+			updateGamelist(changes.games.newValue);
+		}
+		//random
+		if(changes.random){
+			mThis.randomGame = changes.random.newValue;
 		}
 	});
+	$.subscribe("inithour", function(hour){
+		mThis.currentHour = hour;
+	});
+	$.subscribe("initoptions", function(options){
+		printDebug("audio manager: init options");
+		//init volume
+		audio.volume = options.volume;
+		//init randomGame
+		mThis.randomGame = options.random;
+		//init gamelist
+		updateGamelist(options.games);
+	});
 	
-
+	function updateGamelist(newPlaylist){
+		if(newPlaylist){
+			mThis.gamelist = newPlaylist;
+			//reset audio if current playing audio removed from gamelist
+			if(mThis.gamelist.length > 0 && mThis.gamelist.indexOf(mThis.currentGame) === -1){ //current audio not in playlist any more
+				//change audio to first audio in the play list
+				playNextSong();
+			}//else do nothing
+		}
+	}
+	
 	// isHourChange is true if it's an actual hour change,
 	// false if we're activating music in the middle of an hour
 	function playHourlyMusic(hour, game, isHourChange, weather) {
@@ -94,27 +112,37 @@ function AudioManager(addEventListener, isTownTune) {
 			}
 		}
 		playAudio(game, hour, weather);
-		//add ended listener
-		audio.addEventListener("ended", playNextSong);
 	}
 	
 	function playNextSong(){
+		console.log(mThis.gamelist);
 		//play next song on the play list
-		var currentPlayListIndex = mThis.playList.indexOf(mThis.currentAudio);
-		currentPlayListIndex++;
+		var currentPlayListIndex = mThis.gamelist.indexOf(mThis.currentGame);
+		if(mThis.randomGame){
+			//check play list has more than one song
+			if(mThis.gamelist.length > 1){
+				//play random other than current song
+				//generate random index
+				var randomIndex = getRandomNumber(0, mThis.gamelist.length-1);
+				currentPlayListIndex = randomIndex === currentPlayListIndex ? randomIndex + 1 : randomIndex;
+			} //else play current song again
+		}else{
+			currentPlayListIndex++;
+		}
 		//looping play list
-		if(currentPlayListIndex > mThis.playList.length - 1) currentPlayListIndex = 0;
+		if(currentPlayListIndex > mThis.gamelist.length - 1) currentPlayListIndex = 0;
+		
 		//get next song	
-		var nextSong = mThis.playList[currentPlayListIndex];
+		var nextSong = mThis.gamelist[currentPlayListIndex];
 
-		console.log("play next song: " + nextSong);
+		printDebug("play next song: " + nextSong);
 		//play next song
 		playAudio(nextSong, mThis.currentHour);
 	}
 	
 	
 	function playAudio(game, hour, weather){
-		mThis.currentAudio = game;
+		mThis.currentGame = game;
 		mThis.currentHour = hour;
 		resourceManager.getResource(game, hour, weather).then(function(audioSrc){
 			//setup audio

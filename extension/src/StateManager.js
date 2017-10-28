@@ -7,6 +7,8 @@ function StateManager() {
 	const defaultOptions = {
 			volume: 0.5,
 			music: '10',
+			games: ["30"], //new leaf
+			random: false, 
 			enableNotifications: true,
 			enableKK: true,
 			alwaysKK: false,
@@ -42,6 +44,8 @@ function StateManager() {
 
 	this.activate = function() {
 		isKKTime = timeKeeper.getDay() == 6 && timeKeeper.getHour() >= 20;
+		//init hour
+		$.publish("inithour", [timeKeeper.getHour()]);
 		getSavedOptions(function(items) {
 			options = items;
 			if(!weatherManager) {
@@ -53,13 +57,17 @@ function StateManager() {
 					}
 				});
 			}
-	
-			notifyListeners("volume", [options.volume]);
+			
+			//on app load, start music
+			//play playlist
+			//notify option has been init
+			$.publish("initoptions", [options]);
+			
 			if (isKK()) {
 				notifyListeners("kkStart");
 			}
 			else {
-				notifyHourMusic(false);
+				//notifyHourMusic(false);
 			}
 		});
 	};

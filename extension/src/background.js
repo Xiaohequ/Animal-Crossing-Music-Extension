@@ -7,7 +7,7 @@ chrome.app.runtime.onLaunched.addListener(function() {
   chrome.app.window.create('assets/background.html', {
 	 id: "animal-crossing-music-frame",
     'innerBounds': {
-      'width': 400,
+      'width': 300,
       'height': 500
     },
 //    frame: "none",
