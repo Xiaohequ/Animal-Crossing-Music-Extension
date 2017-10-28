@@ -62,7 +62,7 @@ function AudioManager(addEventListener, isTownTune) {
 			//reset audio if current playing audio removed from gamelist
 			if(mThis.gamelist.length > 0 && mThis.gamelist.indexOf(mThis.currentGame) === -1){ //current audio not in playlist any more
 				//change audio to first audio in the play list
-				playNextSong();
+				fadeOutAudio(500, playNextSong);
 			}//else do nothing
 		}
 	}
@@ -115,7 +115,6 @@ function AudioManager(addEventListener, isTownTune) {
 	}
 	
 	function playNextSong(){
-		console.log(mThis.gamelist);
 		//play next song on the play list
 		var currentPlayListIndex = mThis.gamelist.indexOf(mThis.currentGame);
 		if(mThis.randomGame){
@@ -130,7 +129,7 @@ function AudioManager(addEventListener, isTownTune) {
 			currentPlayListIndex++;
 		}
 		//looping play list
-		if(currentPlayListIndex > mThis.gamelist.length - 1) currentPlayListIndex = 0;
+		if(currentPlayListIndex < 0 || currentPlayListIndex > mThis.gamelist.length - 1) currentPlayListIndex = 0;
 		
 		//get next song	
 		var nextSong = mThis.gamelist[currentPlayListIndex];
